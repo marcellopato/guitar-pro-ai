@@ -6,7 +6,7 @@
   "scripts": {
     "start": "concurrently \"npm run start:react\" \"wait-on http://localhost:3000 && npm run start:electron\"",
     "start:react": "react-scripts start",
-    "start:electron": "electron .",
+    "start:electron": "ELECTRON_START_URL=http://localhost:3000 electron .",
     "build": "react-scripts build",
     "build:electron": "electron-builder",
     "test": "react-scripts test",
@@ -19,6 +19,9 @@
     "react-dom": "^18.2.0",
     "tone": "^13.8.25",
     "vexflow": "^4.2.3"
+  },
+  "resolutions": {
+    "tone": "13.8.25"
   },
   "devDependencies": {
     "concurrently": "^8.2.1",

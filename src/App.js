@@ -3,7 +3,7 @@ import './components/App.css';
 import Toolbar from './components/Toolbar';
 import TabEditor from './components/TabEditor';
 import AudioEngine from './components/AudioEngine';
-import AIAssistant from './components/AIAssistant';
+// import AIAssistant from './components/AIAssistant'; // Temporariamente desabilitado devido a conflito Tone.js
 
 const sampleTab = {
   title: 'Minha Música',
@@ -135,9 +135,10 @@ function App() {
           />
         </div>
 
-        <div className="ai-panel">
+        {/* Painel IA temporariamente desabilitado devido a conflito de versão Tone.js */}
+        {/* <div className="ai-panel">
           <AIAssistant currentTab={currentTab} onSuggestion={handleSuggestion} />
-        </div>
+        </div> */}
       </div>
 
       <AudioEngine

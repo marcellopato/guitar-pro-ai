@@ -18,21 +18,31 @@ const AudioEngine = ({ tab, isPlaying, onPlaybackEnd }) => {
    */
   useEffect(() => {
     if (!initializedRef.current) {
-      // Cria um sintetizador polifônico com timbre de guitarra
-      synthRef.current = new Tone.PolySynth(Tone.Synth, {
-        oscillator: {
-          type: 'triangle'
-        },
-        envelope: {
-          attack: 0.005,
-          decay: 0.3,
-          sustain: 0.4,
-          release: 1.2
-        },
-        volume: -8
-      }).toDestination();
+      try {
+        // Cria um sintetizador polifônico com timbre de guitarra
+        // Nota: No Tone.js 13.x, não passamos argumentos no construtor do PolySynth
+        synthRef.current = new Tone.PolySynth();
+        
+        // Configura o synth base
+        synthRef.current.set({
+          oscillator: {
+            type: 'triangle'
+          },
+          envelope: {
+            attack: 0.005,
+            decay: 0.3,
+            sustain: 0.4,
+            release: 1.2
+          },
+          volume: -8
+        });
+        
+        synthRef.current.toMaster();
 
-      initializedRef.current = true;
+        initializedRef.current = true;
+      } catch (error) {
+        console.error('Erro ao inicializar AudioEngine:', error);
+      }
     }
 
     // Cleanup ao desmontar
