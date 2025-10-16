@@ -1,65 +1,193 @@
 # 🎸 Guitar AI Pro
 
-Editor de tablatura open-source com Inteligência Artificial integrada - Uma alternativa moderna ao Guitar Pro.
+<div align="center">
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Electron](https://img.shields.io/badge/Electron-28.0-blue.svg)
-![React](https://img.shields.io/badge/React-18.2-blue.svg)
+![Guitar AI Pro Logo](https://img.shields.io/badge/Guitar_AI_Pro-v0.1.0-667eea?style=for-the-badge&logo=music)
 
-## ✨ Features
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen?style=flat-square)](https://github.com)
+[![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
+[![Electron](https://img.shields.io/badge/Electron-27.0.0-47848F?style=flat-square&logo=electron)](https://www.electronjs.org/)
+[![React](https://img.shields.io/badge/React-18.2.0-61DAFB?style=flat-square&logo=react)](https://reactjs.org/)
 
-### Já Implementado (MVP)
-- ✅ Editor de tablatura interativo com canvas
-- ✅ Sistema de playback MIDI com Tone.js
-- ✅ Assistente de IA musical usando Magenta.js
-- ✅ Sugestão de próximas notas
-- ✅ Geração de melodias do zero
-- ✅ Interface moderna e intuitiva
-- ✅ Salvar/Carregar projetos (.gap format)
-- ✅ Controles de tempo e BPM
+**Editor de Tablatura Musical com IA Integrada**
 
-### Em Desenvolvimento
-- 🚧 Múltiplas tracks/instrumentos
-- 🚧 Efeitos de guitarra (distorção, reverb, delay)
-- 🚧 Exportar para MIDI/PDF/MusicXML
-- 🚧 Harmonização automática
-- 🚧 Geração de solos por estilo
-- 🚧 Importar arquivos Guitar Pro (.gp5, .gpx)
-- 🚧 Colaboração em tempo real
+Uma alternativa open-source e moderna ao Guitar Pro, com geração musical assistida por Inteligência Artificial.
 
-## 🚀 Instalação
+[🚀 Início Rápido](#-início-rápido) • [📖 Documentação](#-uso) • [🤝 Contribuir](CONTRIBUTING.md)
+
+</div>
+
+---
+
+## 📋 Índice
+
+- [Sobre o Projeto](#-sobre-o-projeto)
+- [Funcionalidades](#-funcionalidades)
+- [Tecnologias](#-tecnologias)
+- [Início Rápido](#-início-rápido)
+- [Uso](#-uso)
+- [Estrutura do Projeto](#-estrutura-do-projeto)
+- [Desenvolvimento](#-desenvolvimento)
+- [Roadmap](#-roadmap)
+- [Licença](#-licença)
+
+---
+
+## 🎯 Sobre o Projeto
+
+Guitar AI Pro é um editor de tablatura musical desktop que combina as funcionalidades tradicionais de editores como Guitar Pro com o poder da Inteligência Artificial para auxiliar na composição musical.
+
+### Por que Guitar AI Pro?
+
+- ✅ **100% Gratuito e Open Source** - Sem limitações ou pagamentos
+- 🤖 **IA Musical Integrada** - Gere melodias e harmonias automaticamente
+- 🎵 **Playback em Tempo Real** - Ouça suas composições instantaneamente
+- 💻 **Multiplataforma** - Windows, macOS e Linux
+- 🎨 **Interface Moderna** - UI intuitiva e responsiva
+- 📁 **Compatível** - Importa e exporta formatos populares
+
+---
+
+## ✨ Funcionalidades
+
+### Já Implementadas ✅
+
+- [x] Editor visual de tablatura com canvas HTML5
+- [x] Sistema de playback com Tone.js
+- [x] Geração de melodias com Magenta.js
+- [x] Controle de tempo (BPM) e duração de notas
+- [x] Interface responsiva com sidebar
+- [x] Suporte a múltiplas afinações
+
+### Em Desenvolvimento 🚧
+
+- [ ] Sistema de salvar/carregar projetos
+- [ ] Undo/Redo completo
+- [ ] Metrônomo visual e audível
+- [ ] Biblioteca de acordes
+- [ ] Exportação MIDI
+- [ ] Múltiplas tracks/instrumentos
+
+### Futuro 🔮
+
+- [ ] Exportação para PDF
+- [ ] Importação de arquivos Guitar Pro (.gp5, .gpx)
+- [ ] Efeitos de áudio (distorção, reverb, delay)
+- [ ] Colaboração em tempo real
+- [ ] Detecção de áudio para transcrição automática
+
+---
+
+## �️ Tecnologias
+
+### Core Stack
+
+- **Electron** - Framework desktop multiplataforma
+- **React** - Biblioteca de UI
+- **Tone.js** - Engine de áudio e síntese
+- **Magenta.js** - Modelos de IA musical (TensorFlow.js)
+
+### Dependências Principais
+
+```json
+{
+  "electron": "^27.0.0",
+  "react": "^18.2.0",
+  "tone": "^14.7.77",
+  "@magenta/music": "^1.23.1"
+}
+```
+
+---
+
+## 🚀 Início Rápido
 
 ### Pré-requisitos
-- Node.js 18+ 
-- npm ou yarn
 
-### Passos
+- **Node.js** >= 16.x
+- **npm** >= 8.x
+- **Git**
+
+### Instalação
 
 ```bash
-# 1. Clone o repositório
+# Clone o repositório
 git clone https://github.com/seu-usuario/guitar-ai-pro.git
+
+# Entre na pasta do projeto
 cd guitar-ai-pro
 
-# 2. Instale as dependências
+# Instale as dependências
 npm install
 
-# 3. Inicie o modo desenvolvimento
+# Inicie o aplicativo
 npm start
-
-# O app irá abrir automaticamente!
 ```
 
-### Build para produção
+O aplicativo será aberto automaticamente em uma janela Electron.
+
+### Build para Produção
 
 ```bash
-# Build da aplicação React
+# Build para o seu sistema operacional
 npm run build
 
-# Build do executável Electron (Mac/Windows/Linux)
-npm run build:electron
+# Build específico
+npm run build:win    # Windows
+npm run build:mac    # macOS
+npm run build:linux  # Linux
 ```
 
-Os executáveis estarão em `dist/`.
+Os executáveis estarão na pasta `dist/`.
+
+---
+
+---
+
+## � Uso
+
+### Interface Básica
+
+```
+┌─────────────────────────────────────────────────────────┐
+│  [📄] [📁] [💾]  [▶️] [BPM: 120]  [⚙️]                  │  ← Toolbar
+├─────────────────────────────────────────┬───────────────┤
+│                                         │               │
+│   Canvas de Tablatura                   │   Painel IA   │
+│   (Clique para adicionar notas)         │               │
+│                                         │   [Gerar]     │
+│   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━      │   [Config]    │
+│   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━      │               │
+│                                         │               │
+└─────────────────────────────────────────┴───────────────┘
+```
+
+### Atalhos de Teclado
+
+| Atalho | Ação |
+|--------|------|
+| `Ctrl+N` | Novo projeto |
+| `Ctrl+O` | Abrir projeto |
+| `Ctrl+S` | Salvar projeto |
+| `Ctrl+Z` | Desfazer |
+| `Ctrl+Y` | Refazer |
+| `Space` | Play/Pause |
+| `Delete` | Remover nota selecionada |
+
+### Adicionando Notas
+
+1. Clique na corda desejada no canvas
+2. Digite o número do traste (0-24)
+3. A nota será adicionada automaticamente
+
+### Usando a IA
+
+1. Abra o painel lateral direito
+2. Ajuste a "Temperature" (criatividade) e "Steps" (comprimento)
+3. Clique em "Generate Melody"
+4. A IA gerará uma continuação baseada nas suas notas
+
+---
 
 ## 📁 Estrutura do Projeto
 
@@ -67,167 +195,101 @@ Os executáveis estarão em `dist/`.
 guitar-ai-pro/
 ├── electron/
 │   ├── main.js          # Processo principal do Electron
-│   └── preload.js       # Bridge segura
+│   └── preload.js       # Bridge segura Node.js ↔ Renderer
+├── public/
+│   └── index.html       # HTML base
 ├── src/
 │   ├── components/
-│   │   ├── TabEditor.js       # Editor de tablatura
-│   │   ├── AudioEngine.js     # Motor de áudio
-│   │   ├── AIAssistant.js     # Assistente IA
-│   │   └── Toolbar.js         # Barra de ferramentas
-│   ├── App.js           # Componente principal
-│   └── App.css          # Estilos globais
+│   │   ├── AIAssistant.js    # Painel de IA
+│   │   ├── AudioEngine.js    # Engine de áudio (Tone.js)
+│   │   ├── TabEditor.js      # Canvas de edição
+│   │   └── Toolbar.js        # Barra de ferramentas
+│   ├── App.js           # Componente raiz
+│   ├── App.css          # Estilos globais
+│   └── index.js         # Entry point React
 ├── package.json
 └── README.md
 ```
 
-## 🎯 Como Usar
+---
 
-### Adicionar Notas
-1. Clique em qualquer posição na tablatura
-2. Digite o número do traste (0-24)
-3. A nota será adicionada
+## 🔧 Desenvolvimento
 
-### Reproduzir
-1. Clique no botão ▶️ na toolbar
-2. Ajuste o BPM conforme necessário
-3. Use ⏸️ para pausar
+### Arquitetura
 
-### Usar IA
-1. Clique no botão 🤖 IA na toolbar
-2. Ajuste a criatividade (temperature)
-3. Escolha quantas notas gerar
-4. Clique em "Continuar Melodia" ou "Gerar do Zero"
-5. Aplique a sugestão se gostar!
-
-### Salvar/Abrir Projetos
-- **Ctrl/Cmd + N**: Novo arquivo
-- **Ctrl/Cmd + O**: Abrir arquivo
-- **Ctrl/Cmd + S**: Salvar
-- **Ctrl/Cmd + Shift + S**: Salvar como
-
-## 🤖 Sobre a IA
-
-O Guitar AI Pro usa o **Magenta.js** do Google para gerar música:
-
-- **MusicRNN**: Rede neural recorrente treinada em milhões de melodias
-- **Temperature**: Controla criatividade (0.5 = conservador, 2.0 = experimental)
-- **Context-aware**: A IA considera as notas já escritas
-
-### Como funciona
-1. Suas notas são convertidas para formato MIDI
-2. O modelo RNN analisa o padrão
-3. Gera continuações musicalmente coerentes
-4. Converte de volta para tablatura
-
-## 🛠️ Stack Tecnológica
-
-- **Electron 28**: Framework desktop multiplataforma
-- **React 18**: Interface de usuário
-- **Tone.js**: Síntese e reprodução de áudio
-- **Magenta.js**: IA musical (Google)
-- **TensorFlow.js**: Machine learning no browser
-- **Canvas API**: Renderização da tablatura
-
-## 🎨 Customização
-
-### Adicionar novos instrumentos
-
-Edite `src/components/AudioEngine.js`:
-
-```javascript
-const instruments = {
-  guitar: new Tone.PolySynth(Tone.Synth),
-  bass: new Tone.MonoSynth({
-    oscillator: { type: 'sawtooth' }
-  }),
-  piano: new Tone.Sampler({
-    urls: { C4: 'C4.mp3' },
-    baseUrl: 'https://tonejs.github.io/audio/salamander/'
-  })
-};
+```
+┌──────────────────────────────────────┐
+│         Electron Main Process        │
+│  (File System, Menu, IPC Handlers)   │
+└────────────┬─────────────────────────┘
+             │ IPC Communication
+┌────────────▼─────────────────────────┐
+│       Electron Renderer Process      │
+│              (React App)             │
+├──────────────────────────────────────┤
+│  ┌─────────┐  ┌──────────────────┐  │
+│  │ Toolbar │  │   TabEditor      │  │
+│  └─────────┘  │   (Canvas API)   │  │
+│               └──────────────────┘  │
+│  ┌──────────────┐  ┌─────────────┐  │
+│  │ AudioEngine  │  │ AIAssistant │  │
+│  │  (Tone.js)   │  │ (Magenta.js)│  │
+│  └──────────────┘  └─────────────┘  │
+└──────────────────────────────────────┘
 ```
 
-### Adicionar efeitos de áudio
+---
 
-```javascript
-const distortion = new Tone.Distortion(0.8).toDestination();
-const reverb = new Tone.Reverb(2).toDestination();
+## 🗺️ Roadmap
 
-synth.connect(distortion);
-synth.connect(reverb);
-```
+### v0.2.0 (Q1 2026)
+- [ ] Sistema completo de save/load
+- [ ] Undo/Redo ilimitado
+- [ ] Metrônomo visual
+- [ ] Biblioteca de 100+ acordes
 
-### Customizar aparência da tablatura
+### v0.3.0 (Q2 2026)
+- [ ] Múltiplas tracks
+- [ ] Exportação MIDI
+- [ ] Importação Guitar Pro básica
+- [ ] Efeitos de áudio (3-4 básicos)
 
-Edite `src/components/TabEditor.js` nas constantes:
+### v0.4.0 (Q3 2026)
+- [ ] Exportação PDF
+- [ ] Plugin system
+- [ ] Temas customizáveis
+- [ ] Modo colaborativo (beta)
 
-```javascript
-const lineSpacing = 25;      // Espaçamento entre cordas
-const measureWidth = 200;    // Largura do compasso
-const startY = 100;          // Posição inicial Y
-```
+### v1.0.0 (Q4 2026)
+- [ ] Versão estável completa
+- [ ] Todas as features principais
+- [ ] Documentação completa
 
-## 🤝 Contribuindo
+---
 
-Contribuições são muito bem-vindas! 
+## 📄 Licença
 
-1. Fork o projeto
-2. Crie sua feature branch (`git checkout -b feature/NovaFeature`)
-3. Commit suas mudanças (`git commit -m 'Adiciona nova feature'`)
-4. Push para a branch (`git push origin feature/NovaFeature`)
-5. Abra um Pull Request
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
-### Áreas que precisam de ajuda
-- [ ] Importador de arquivos Guitar Pro (.gp5, .gpx)
-- [ ] Exportador para PDF
-- [ ] Mais modelos de IA (diferentes estilos musicais)
-- [ ] Suporte a mais instrumentos
-- [ ] Testes unitários
-- [ ] Documentação
+---
 
-## 📝 Formato de Arquivo (.gap)
+## � Agradecimentos
 
-O Guitar AI Pro usa um formato JSON simples:
+- [Tone.js](https://tonejs.github.io/) - Audio synthesis
+- [Magenta.js](https://magenta.tensorflow.org/) - Machine learning models
+- [Electron](https://www.electronjs.org/) - Desktop framework
+- [React](https://reactjs.org/) - UI library
+- Comunidade open-source 💜
 
-```json
-{
-  "title": "Minha Música",
-  "tempo": 120,
-  "timeSignature": "4/4",
-  "tracks": [
-    {
-      "id": 1,
-      "instrument": "guitar",
-      "tuning": ["E", "A", "D", "G", "B", "E"],
-      "measures": [
-        {
-          "id": 1,
-          "notes": [
-            {
-              "id": 1234567890,
-              "string": 0,
-              "fret": 5,
-              "duration": "4n"
-            }
-          ]
-        }
-      ]
-    }
-  ]
-}
-```
+---
 
-## 🐛 Problemas Conhecidos
+<div align="center">
 
-- **Latência no playback**: Em alguns sistemas pode haver delay. Ajuste o buffer no Tone.js
-- **Modelo IA lento na primeira execução**: Normal - o modelo está carregando
-- **Canvas não renderiza no Linux**: Instale dependências do Cairo
+**Feito com ❤️ pela comunidade open-source**
 
-## 📚 Recursos de Aprendizado
+[⬆ Voltar ao topo](#-guitar-ai-pro)
 
-### Para JavaScript/React
-- [React Docs](https://react.dev)
-- [Modern JavaScript Tutorial](https://javascript.info)
+</div>
 
 ### Para Electron
 - [Electron Documentation](https://electronjs.org/docs)
