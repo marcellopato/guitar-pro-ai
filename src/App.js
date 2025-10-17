@@ -3,7 +3,8 @@ import './components/App.css';
 import Toolbar from './components/Toolbar';
 import TabEditor from './components/TabEditor';
 import AudioEngine from './components/AudioEngine';
-// import AIAssistant from './components/AIAssistant'; // Temporariamente desabilitado devido a conflito Tone.js
+
+console.log('📝 App.js sendo carregado no módulo...');
 
 const sampleTab = {
   title: 'Minha Música',
@@ -28,13 +29,16 @@ const sampleTab = {
   ]
 };
 
+console.log('📊 sampleTab criado:', sampleTab);
+
 function App() {
+  console.log('🎸 App function EXECUTOU!');
+  
   const [currentTab, setCurrentTab] = useState(sampleTab);
   const [isPlaying, setIsPlaying] = useState(false);
   const [selectedNote, setSelectedNote] = useState(null);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
-  // Handlers do Toolbar
   const handleTempoChange = (newTempo) => {
     setCurrentTab({ ...currentTab, tempo: newTempo });
     setHasUnsavedChanges(true);
@@ -72,13 +76,11 @@ function App() {
   };
 
   const handleSave = () => {
-    // Simula salvamento
     console.log('Salvando projeto:', currentTab);
     alert('Projeto salvo! (simulação)');
     setHasUnsavedChanges(false);
   };
 
-  // Handlers do TabEditor
   const handleNoteAdd = (newNote) => {
     const newTab = { ...currentTab };
     newTab.tracks[0].measures[0].notes.push(newNote);
@@ -100,16 +102,7 @@ function App() {
     setSelectedNote(note);
   };
 
-  // Handler da IA
-  const handleSuggestion = (suggestion) => {
-    const newTab = { ...currentTab };
-    newTab.tracks[0].measures[0].notes = [
-      ...newTab.tracks[0].measures[0].notes,
-      ...suggestion
-    ];
-    setCurrentTab(newTab);
-    setHasUnsavedChanges(true);
-  };
+  console.log('🎨 App está prestes a renderizar JSX...');
 
   return (
     <div className="App">
@@ -134,11 +127,6 @@ function App() {
             onNoteSelect={handleNoteSelect}
           />
         </div>
-
-        {/* Painel IA temporariamente desabilitado devido a conflito de versão Tone.js */}
-        {/* <div className="ai-panel">
-          <AIAssistant currentTab={currentTab} onSuggestion={handleSuggestion} />
-        </div> */}
       </div>
 
       <AudioEngine

@@ -1,72 +1,50 @@
 import { useEffect, useRef } from 'react';
-import * as Tone from 'tone';
+import { Howl } from 'howler';
 
 /**
- * Componente Audio Engine usando Tone.js
+ * Componente Audio Engine usando Howler.js
  * Gerencia síntese de áudio e playback da tablatura
- * @param {Object} tab - Dados da tablatura
- * @param {boolean} isPlaying - Estado de reprodução
- * @param {Function} onPlaybackEnd - Callback quando termina reprodução
  */
 const AudioEngine = ({ tab, isPlaying, onPlaybackEnd }) => {
-  const synthRef = useRef(null);
-  const partRef = useRef(null);
+  console.log('🎵 AudioEngine (Howler.js) CARREGANDO...');
+  
+  const playbackTimeoutRef = useRef(null);
+  const currentSoundsRef = useRef([]);
   const initializedRef = useRef(false);
 
-  /**
-   * Inicializa o sintetizador
-   */
-  /**
-   * Inicializa o sintetizador
-   */
   useEffect(() => {
+    console.log('🎵 AudioEngine useEffect EXECUTANDO...');
+    
     if (!initializedRef.current) {
       try {
-        // Cria um sintetizador polifônico com timbre de guitarra
-        // Nota: No Tone.js 13.x, não passamos argumentos no construtor do PolySynth
-        synthRef.current = new Tone.PolySynth();
+        console.log('🎵 Inicializando Web Audio via Howler...');
         
-        // Configura o synth base
-        synthRef.current.set({
-          oscillator: {
-            type: 'triangle'
-          },
-          envelope: {
-            attack: 0.005,
-            decay: 0.3,
-            sustain: 0.4,
-            release: 1.2
-          },
-          volume: -8
+        // FORÇA inicialização do Howler AudioContext
+        const dummySound = new Howl({
+          src: ['data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA='],
+          volume: 0
         });
+        dummySound.play();
+        dummySound.unload();
         
-        synthRef.current.toMaster();
-
+        console.log('🎵 Howler AudioContext:', Howler.ctx ? 'DISPONÍVEL ✅' : 'NULL ❌');
+        
         initializedRef.current = true;
+        console.log('✅ AudioEngine (Howler.js) INICIALIZADO!');
       } catch (error) {
-        console.error('Erro ao inicializar AudioEngine:', error);
+        console.error('❌ ERRO ao inicializar:', error);
       }
     }
 
-    // Cleanup ao desmontar
     return () => {
-      if (synthRef.current) {
-        synthRef.current.dispose();
-        synthRef.current = null;
+      console.log('🧹 AudioEngine CLEANUP...');
+      if (playbackTimeoutRef.current) {
+        clearTimeout(playbackTimeoutRef.current);
       }
-      if (partRef.current) {
-        partRef.current.dispose();
-        partRef.current = null;
-      }
-      Tone.Transport.stop();
-      Tone.Transport.cancel();
       initializedRef.current = false;
     };
   }, []);
 
-  /**
-   * Controla playback baseado no estado isPlaying
-   */
   useEffect(() => {
     if (isPlaying) {
       playTab();
@@ -75,146 +53,125 @@ const AudioEngine = ({ tab, isPlaying, onPlaybackEnd }) => {
     }
   }, [isPlaying, tab]);
 
-  /**
-   * Converte número MIDI para nota Tone.js
-   */
-  const midiToNote = (midiNumber) => {
-    return Tone.Frequency(midiNumber, 'midi').toNote();
+  const midiToFrequency = (midiNumber) => {
+    return 440 * Math.pow(2, (midiNumber - 69) / 12);
   };
 
-  /**
-   * Obtém número MIDI baseado na afinação da corda e traste
-   */
   const getStringMidi = (tuning) => {
     const noteToMidi = {
-      'C': 48, 'C#': 49, 'Db': 49,
-      'D': 50, 'D#': 51, 'Eb': 51,
-      'E': 52,
-      'F': 53, 'F#': 54, 'Gb': 54,
-      'G': 55, 'G#': 56, 'Ab': 56,
-      'A': 57, 'A#': 58, 'Bb': 58,
-      'B': 59
+      'E': 52, 'A': 57, 'D': 50, 'G': 55, 'B': 59, 'C': 48, 'F': 53
     };
-
-    return tuning.map(note => {
-      // Afinação padrão de guitarra: E2, A2, D3, G3, B3, E4
+    return tuning.map((note, index) => {
       const baseMidi = noteToMidi[note] || 52;
-      const octaveOffset = tuning.indexOf(note) < 3 ? -12 : 0;
+      const octaveOffset = index < 3 ? -12 : 0;
       return baseMidi + octaveOffset;
     });
   };
 
-  /**
-   * Converte tablatura para eventos de áudio
-   */
-  const convertTabToEvents = (tab) => {
-    const events = [];
-    const track = tab.tracks[0];
+  const createNoteSound = (frequency, duration = 0.5) => {
+    let audioContext = Howler.ctx;
     
-    if (!track || !track.measures) {
-      return events;
+    // Se AudioContext não existe, tenta inicializar
+    if (!audioContext) {
+      console.warn('⚠️ AudioContext NULL, tentando inicializar...');
+      try {
+        // Força criação do AudioContext
+        const tempSound = new Howl({
+          src: ['data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA='],
+          volume: 0
+        });
+        tempSound.play();
+        tempSound.unload();
+        audioContext = Howler.ctx;
+      } catch (e) {
+        console.error('❌ Erro ao criar AudioContext:', e);
+      }
+    }
+    
+    if (!audioContext) {
+      console.error('❌ AudioContext ainda não disponível após tentativa');
+      return;
     }
 
-    const tuning = track.tuning || ['E', 'A', 'D', 'G', 'B', 'E'];
-    const stringMidi = getStringMidi(tuning);
-    
-    let currentTime = 0;
+    console.log(`🎵 Tocando nota: ${frequency.toFixed(2)} Hz por ${duration.toFixed(2)}s`);
 
-    track.measures.forEach((measure) => {
-      if (!measure.notes || measure.notes.length === 0) return;
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
 
-      measure.notes.forEach((note) => {
-        const midiNote = stringMidi[note.string] + note.fret;
-        const noteName = midiToNote(midiNote);
-        const duration = note.duration || '8n';
-        const velocity = note.velocity || 0.8;
+    oscillator.type = 'triangle';
+    oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
 
-        events.push({
-          time: currentTime,
-          note: noteName,
-          duration: duration,
-          velocity: velocity
-        });
+    // VOLUME AUMENTADO: 0.5 (era 0.3)
+    gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+    gainNode.gain.linearRampToValueAtTime(0.5, audioContext.currentTime + 0.01);
+    gainNode.gain.exponentialRampToValueAtTime(0.2, audioContext.currentTime + duration * 0.3);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
 
-        // Avança o tempo baseado na duração
-        currentTime += Tone.Time(duration).toSeconds();
-      });
-    });
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
 
-    return events;
+    oscillator.start(audioContext.currentTime);
+    oscillator.stop(audioContext.currentTime + duration);
+
+    oscillator.onended = () => {
+      oscillator.disconnect();
+      gainNode.disconnect();
+    };
   };
 
-  /**
-   * Inicia reprodução da tablatura
-   */
-  /**
-   * Inicia reprodução da tablatura
-   */
-  const playTab = async () => {
+  const playTab = () => {
     try {
-      // Inicia contexto de áudio (necessário após interação do usuário)
-      await Tone.start();
-      
-      // Para qualquer reprodução anterior
+      console.log('🎵 Iniciando playback...');
       stopPlayback();
 
-      // Configura BPM
-      Tone.Transport.bpm.value = tab.tempo || 120;
-
-      // Converte tablatura para eventos
-      const events = convertTabToEvents(tab);
-
-      if (events.length === 0) {
-        console.warn('Nenhuma nota para reproduzir');
+      const track = tab.tracks[0];
+      if (!track || !track.measures) {
         onPlaybackEnd && onPlaybackEnd();
         return;
       }
 
-      // Cria Part (sequência de eventos)
-      partRef.current = new Tone.Part((time, event) => {
-        synthRef.current.triggerAttackRelease(
-          event.note,
-          event.duration,
-          time,
-          event.velocity
-        );
-      }, events);
+      const tuning = track.tuning || ['E', 'A', 'D', 'G', 'B', 'E'];
+      const stringMidi = getStringMidi(tuning);
+      const beatDuration = 60 / (tab.tempo || 120);
 
-      // Configura loop (opcional)
-      partRef.current.loop = false;
+      console.log(`🎵 Tempo: ${tab.tempo || 120} BPM, Beat: ${beatDuration.toFixed(2)}s`);
 
-      // Inicia reprodução
-      partRef.current.start(0);
-      Tone.Transport.start();
+      let currentTime = 0;
+      track.measures.forEach((measure) => {
+        if (!measure.notes) return;
+        measure.notes.forEach((note) => {
+          const midiNote = stringMidi[note.string] + note.fret;
+          const frequency = midiToFrequency(midiNote);
+          // DURAÇÃO AUMENTADA: beatDuration inteiro (era /2)
+          const duration = beatDuration;
 
-      // Calcula duração total e agenda fim do playback
-      const totalDuration = events[events.length - 1].time + Tone.Time(events[events.length - 1].duration).toSeconds();
-      setTimeout(() => {
+          setTimeout(() => {
+            createNoteSound(frequency, duration);
+          }, currentTime * 1000);
+
+          currentTime += duration;
+        });
+      });
+
+      playbackTimeoutRef.current = setTimeout(() => {
+        console.log('✅ Playback concluído');
         onPlaybackEnd && onPlaybackEnd();
-      }, (totalDuration + 0.5) * 1000); // +0.5s de margem para release
+      }, (currentTime + 0.5) * 1000);
 
     } catch (error) {
-      console.error('Erro ao reproduzir:', error);
+      console.error('❌ Erro ao reproduzir:', error);
       onPlaybackEnd && onPlaybackEnd();
     }
   };
 
-  /**
-   * Para a reprodução
-   */
   const stopPlayback = () => {
-    if (partRef.current) {
-      partRef.current.stop();
-      partRef.current.dispose();
-      partRef.current = null;
+    if (playbackTimeoutRef.current) {
+      clearTimeout(playbackTimeoutRef.current);
+      playbackTimeoutRef.current = null;
     }
-    
-    Tone.Transport.stop();
-    Tone.Transport.cancel();
-    Tone.Transport.position = 0;
   };
 
-  // Componente sem UI - apenas lógica de áudio
+  console.log('🎵 AudioEngine RENDER concluído');
   return null;
 };
 

@@ -21,9 +21,9 @@
   "dependencies": {
     "@magenta/music": "^1.23.1",
     "@tensorflow/tfjs": "^4.11.0",
+    "howler": "^2.2.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "tone": "^13.8.25",
     "vexflow": "^4.2.3"
   },
   "resolutions": {
@@ -40,8 +40,14 @@
     "appId": "com.guitaraipro.app",
     "productName": "Guitar AI Pro",
     "files": [
-      "build/**/*",
-      "electron/**/*"
+      "electron/**/*",
+      "!electron/main.js.map"
+    ],
+    "extraResources": [
+      {
+        "from": "build",
+        "to": "build"
+      }
     ],
     "directories": {
       "buildResources": "assets",
