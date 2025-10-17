@@ -7,14 +7,15 @@ function createWindow() {
   const win = new BrowserWindow({
     width: 1200,
     height: 800,
+    show: true, // MOSTRAR IMEDIATAMENTE - ready-to-show não funciona bem no Windows
+    backgroundColor: '#1a1a1a', // Preto ao invés de vermelho
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: false,
       contextIsolation: true,
-      // Importante para produção
-      webSecurity: true
+      webSecurity: true,
+      offscreen: false
     },
-    // Remove menu padrão
     autoHideMenuBar: true
   });
 
@@ -63,8 +64,8 @@ function createWindow() {
       console.error('✗ loadURL failed:', err);
     });
     
-    // Abre DevTools em produção para debug (remover depois)
-    win.webContents.openDevTools();
+    // DevTools removido - pronto para produção!
+    // Usar F12 ou Ctrl+Shift+I para abrir manualmente se necessário
   }
   
   // Log de erros de carregamento
@@ -75,6 +76,12 @@ function createWindow() {
   
   win.webContents.on('did-finish-load', () => {
     console.log('Page loaded successfully!');
+    
+    // Abre DevTools após carregar para debug
+    setTimeout(() => {
+      win.webContents.openDevTools();
+      console.log('DevTools aberto!');
+    }, 1000);
   });
   
   // Log de erros de console do renderer
@@ -83,9 +90,10 @@ function createWindow() {
   });
 }
 
-// Flags para melhor compatibilidade com WSL2
-app.commandLine.appendSwitch('disable-gpu');
-app.commandLine.appendSwitch('disable-software-rasterizer');
+// Flags para melhor compatibilidade - FORÇA renderização por software
+app.commandLine.appendSwitch('disable-gpu'); // Desabilita GPU
+app.commandLine.appendSwitch('disable-gpu-compositing'); // Desabilita composição por GPU
+// NÃO desabilitar software rasterizer - precisamos dele!
 app.commandLine.appendSwitch('no-sandbox');
 app.commandLine.appendSwitch('disable-dev-shm-usage'); // Workaround para /dev/shm no WSL2
 

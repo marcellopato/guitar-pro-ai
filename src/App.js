@@ -1,151 +1,27 @@
-import React, { useState } from 'react';
-import './components/App.css';
-import Toolbar from './components/Toolbar';
-import TabEditor from './components/TabEditor';
-import AudioEngine from './components/AudioEngine';
-// import AIAssistant from './components/AIAssistant'; // Temporariamente desabilitado devido a conflito Tone.js
-
-const sampleTab = {
-  title: 'Minha Música',
-  tempo: 120,
-  tracks: [
-    {
-      id: 1,
-      instrument: 'guitar',
-      tuning: ['E', 'A', 'D', 'G', 'B', 'E'],
-      measures: [
-        {
-          id: 1,
-          notes: [
-            { id: 1, string: 2, fret: 0, duration: '4n' },
-            { id: 2, string: 2, fret: 2, duration: '4n' },
-            { id: 3, string: 3, fret: 2, duration: '4n' },
-            { id: 4, string: 1, fret: 0, duration: '4n' }
-          ]
-        }
-      ]
-    }
-  ]
-};
+import React from 'react';
 
 function App() {
-  const [currentTab, setCurrentTab] = useState(sampleTab);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [selectedNote, setSelectedNote] = useState(null);
-  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
-
-  // Handlers do Toolbar
-  const handleTempoChange = (newTempo) => {
-    setCurrentTab({ ...currentTab, tempo: newTempo });
-    setHasUnsavedChanges(true);
-  };
-
-  const handlePlayToggle = () => {
-    setIsPlaying(!isPlaying);
-  };
-
-  const handlePlaybackEnd = () => {
-    setIsPlaying(false);
-  };
-
-  const handleNew = () => {
-    if (hasUnsavedChanges) {
-      if (!window.confirm('Você tem alterações não salvas. Deseja continuar?')) {
-        return;
-      }
-    }
-    setCurrentTab({
-      title: 'Nova Música',
-      tempo: 120,
-      tracks: [{
-        id: 1,
-        instrument: 'guitar',
-        tuning: ['E', 'A', 'D', 'G', 'B', 'E'],
-        measures: [{ id: 1, notes: [] }]
-      }]
-    });
-    setHasUnsavedChanges(false);
-  };
-
-  const handleOpen = () => {
-    alert('Funcionalidade de abrir arquivo será implementada na próxima fase!');
-  };
-
-  const handleSave = () => {
-    // Simula salvamento
-    console.log('Salvando projeto:', currentTab);
-    alert('Projeto salvo! (simulação)');
-    setHasUnsavedChanges(false);
-  };
-
-  // Handlers do TabEditor
-  const handleNoteAdd = (newNote) => {
-    const newTab = { ...currentTab };
-    newTab.tracks[0].measures[0].notes.push(newNote);
-    setCurrentTab(newTab);
-    setHasUnsavedChanges(true);
-  };
-
-  const handleNoteRemove = (noteId) => {
-    const newTab = { ...currentTab };
-    newTab.tracks[0].measures[0].notes = newTab.tracks[0].measures[0].notes.filter(
-      note => note.id !== noteId
-    );
-    setCurrentTab(newTab);
-    setSelectedNote(null);
-    setHasUnsavedChanges(true);
-  };
-
-  const handleNoteSelect = (note) => {
-    setSelectedNote(note);
-  };
-
-  // Handler da IA
-  const handleSuggestion = (suggestion) => {
-    const newTab = { ...currentTab };
-    newTab.tracks[0].measures[0].notes = [
-      ...newTab.tracks[0].measures[0].notes,
-      ...suggestion
-    ];
-    setCurrentTab(newTab);
-    setHasUnsavedChanges(true);
-  };
-
+  console.log('🎸 App component renderizando...');
+  
   return (
-    <div className="App">
-      <Toolbar
-        tempo={currentTab.tempo}
-        onTempoChange={handleTempoChange}
-        isPlaying={isPlaying}
-        onPlayToggle={handlePlayToggle}
-        onNew={handleNew}
-        onOpen={handleOpen}
-        onSave={handleSave}
-        hasUnsavedChanges={hasUnsavedChanges}
-      />
-
-      <div className="main-content">
-        <div className="editor-area">
-          <TabEditor
-            tab={currentTab}
-            onNoteAdd={handleNoteAdd}
-            onNoteRemove={handleNoteRemove}
-            selectedNote={selectedNote}
-            onNoteSelect={handleNoteSelect}
-          />
-        </div>
-
-        {/* Painel IA temporariamente desabilitado devido a conflito de versão Tone.js */}
-        {/* <div className="ai-panel">
-          <AIAssistant currentTab={currentTab} onSuggestion={handleSuggestion} />
-        </div> */}
-      </div>
-
-      <AudioEngine
-        tab={currentTab}
-        isPlaying={isPlaying}
-        onPlaybackEnd={handlePlaybackEnd}
-      />
+    <div style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      width: '100vw',
+      height: '100vh',
+      backgroundColor: '#00ff00',
+      color: 'black',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      flexDirection: 'column',
+      fontSize: '30px',
+      fontFamily: 'Arial'
+    }}>
+      <h1>🎸 SUCESSO! App está renderizando!</h1>
+      <p>Se você está vendo isso, o React + Electron estão funcionando!</p>
+      <p>Próximo passo: adicionar os componentes reais...</p>
     </div>
   );
 }
