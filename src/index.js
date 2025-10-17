@@ -1,13 +1,7 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
-
-console.log('🚀 React index.js carregado!');
-console.log('📦 Importando App...');
-
 import App from './App';
-
-console.log('✅ App importado com sucesso!', typeof App);
 
 // Error Boundary para capturar erros
 class ErrorBoundary extends React.Component {
@@ -21,16 +15,11 @@ class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, errorInfo) {
-    console.error('🔥 ErrorBoundary capturou erro:', error);
-    console.error('Info:', errorInfo);
-    console.error('ComponentStack:', errorInfo.componentStack);
+    console.error('Error caught:', error, errorInfo);
   }
 
   render() {
-    console.log('🛡️ ErrorBoundary render() CHAMADO, hasError:', this.state.hasError);
-    
     if (this.state.hasError) {
-      console.error('🛡️ Mostrando tela de erro!');
       return (
         <div style={{
           position: 'fixed',
@@ -52,27 +41,15 @@ class ErrorBoundary extends React.Component {
       );
     }
 
-    console.log('🛡️ ErrorBoundary renderizando children...');
     return this.props.children;
   }
 }
 
 const rootElement = document.getElementById('root');
-console.log('�� Root element:', rootElement);
 
 if (!rootElement) {
-  console.error('❌ ERRO: Elemento root não encontrado!');
+  console.error('Root element not found');
 } else {
-  try {
-    const root = createRoot(rootElement);
-    console.log('✅ React root criado, iniciando render...');
-    
-    console.log('🧪 Renderizando DIRETAMENTE App (sem ErrorBoundary)...');
-    root.render(<App />);
-    
-    console.log('✅ React render chamado!');
-  } catch (error) {
-    console.error('❌ ERRO ao renderizar App:', error);
-    console.error('Stack:', error.stack);
-  }
+  const root = createRoot(rootElement);
+  root.render(<App />);
 }
