@@ -40,7 +40,7 @@ const AudioEngine = ({ tab, isPlaying, onPlaybackEnd }) => {
           volume: -8
         });
         
-        synthRef.current.toMaster();
+        synthRef.current.toDestination();
 
         initializedRef.current = true;
       } catch (error) {
