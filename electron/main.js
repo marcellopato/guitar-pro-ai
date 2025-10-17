@@ -24,7 +24,6 @@ function createWindow() {
 
   // Modo desenvolvimento: carrega do servidor React
   if (isDev) {
-    console.log('DEV MODE: Loading from', process.env.ELECTRON_START_URL);
     win.loadURL(process.env.ELECTRON_START_URL);
     win.webContents.openDevTools();
   } 
@@ -33,59 +32,21 @@ function createWindow() {
     // build/ está em resources/build/ (extraResources)
     const indexPath = path.join(process.resourcesPath, 'build', 'index.html');
     
-    console.log('PRODUCTION MODE');
-    console.log('process.resourcesPath:', process.resourcesPath);
-    console.log('__dirname:', __dirname);
-    console.log('indexPath:', indexPath);
-    
-    // Verifica se o arquivo existe (só funciona em dev, mas ajuda debug)
-    const fs = require('fs');
-    try {
-      if (fs.existsSync(indexPath)) {
-        console.log('✓ index.html encontrado!');
-      } else {
-        console.error('✗ index.html NÃO encontrado em:', indexPath);
-      }
-    } catch (err) {
-      console.log('Não foi possível verificar arquivo (pode ser por estar em asar):', err.message);
-    }
-    
     const loadUrl = url.format({
       pathname: indexPath,
       protocol: 'file:',
       slashes: true
     });
     
-    console.log('Loading URL:', loadUrl);
-    
-    win.loadURL(loadUrl).then(() => {
-      console.log('✓ loadURL completed');
-    }).catch(err => {
-      console.error('✗ loadURL failed:', err);
-    });
-    
-    // DevTools FORÇADO para debug de tela preta
-    console.log('🔧 Abrindo DevTools AUTOMATICAMENTE para debug...');
-    win.webContents.openDevTools({ mode: 'detach' });
+    win.loadURL(loadUrl);
   }
   
-  // Log de erros de carregamento
-  win.webContents.on('did-fail-load', (event, errorCode, errorDescription, validatedURL) => {
-    console.error('Failed to load:', errorDescription);
-    console.error('URL tentada:', validatedURL);
-  });
-  
-  win.webContents.on('did-finish-load', () => {
-    console.log('Page loaded successfully!');
-    
-    // DevTools pode ser aberto com F12 se necessário
-    // win.webContents.openDevTools();
-  });
-  
-  // Log de erros de console do renderer
-  win.webContents.on('console-message', (event, level, message, line, sourceId) => {
-    console.log(`Console [${level}]:`, message, `(${sourceId}:${line})`);
-  });
+  // Log apenas erros críticos em produção
+  if (!isDev) {
+    win.webContents.on('did-fail-load', (event, errorCode, errorDescription) => {
+      console.error('Failed to load:', errorDescription);
+    });
+  }
 }
 
 // Flags para melhor compatibilidade - FORÇA renderização por software

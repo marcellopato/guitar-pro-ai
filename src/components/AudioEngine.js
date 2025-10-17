@@ -6,19 +6,13 @@ import { Howl } from 'howler';
  * Gerencia síntese de áudio e playback da tablatura
  */
 const AudioEngine = ({ tab, isPlaying, onPlaybackEnd }) => {
-  console.log('🎵 AudioEngine (Howler.js) CARREGANDO...');
-  
   const playbackTimeoutRef = useRef(null);
   const currentSoundsRef = useRef([]);
   const initializedRef = useRef(false);
 
   useEffect(() => {
-    console.log('🎵 AudioEngine useEffect EXECUTANDO...');
-    
     if (!initializedRef.current) {
       try {
-        console.log('🎵 Inicializando Web Audio via Howler...');
-        
         // FORÇA inicialização do Howler AudioContext
         const dummySound = new Howl({
           src: ['data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA='],
@@ -27,17 +21,13 @@ const AudioEngine = ({ tab, isPlaying, onPlaybackEnd }) => {
         dummySound.play();
         dummySound.unload();
         
-        console.log('🎵 Howler AudioContext:', Howler.ctx ? 'DISPONÍVEL ✅' : 'NULL ❌');
-        
         initializedRef.current = true;
-        console.log('✅ AudioEngine (Howler.js) INICIALIZADO!');
       } catch (error) {
         console.error('❌ ERRO ao inicializar:', error);
       }
     }
 
     return () => {
-      console.log('🧹 AudioEngine CLEANUP...');
       if (playbackTimeoutRef.current) {
         clearTimeout(playbackTimeoutRef.current);
       }
@@ -93,8 +83,6 @@ const AudioEngine = ({ tab, isPlaying, onPlaybackEnd }) => {
       return;
     }
 
-    console.log(`🎵 Tocando nota: ${frequency.toFixed(2)} Hz por ${duration.toFixed(2)}s`);
-
     const oscillator = audioContext.createOscillator();
     const gainNode = audioContext.createGain();
 
@@ -121,7 +109,6 @@ const AudioEngine = ({ tab, isPlaying, onPlaybackEnd }) => {
 
   const playTab = () => {
     try {
-      console.log('🎵 Iniciando playback...');
       stopPlayback();
 
       const track = tab.tracks[0];
@@ -133,8 +120,6 @@ const AudioEngine = ({ tab, isPlaying, onPlaybackEnd }) => {
       const tuning = track.tuning || ['E', 'A', 'D', 'G', 'B', 'E'];
       const stringMidi = getStringMidi(tuning);
       const beatDuration = 60 / (tab.tempo || 120);
-
-      console.log(`🎵 Tempo: ${tab.tempo || 120} BPM, Beat: ${beatDuration.toFixed(2)}s`);
 
       let currentTime = 0;
       track.measures.forEach((measure) => {
@@ -154,7 +139,6 @@ const AudioEngine = ({ tab, isPlaying, onPlaybackEnd }) => {
       });
 
       playbackTimeoutRef.current = setTimeout(() => {
-        console.log('✅ Playback concluído');
         onPlaybackEnd && onPlaybackEnd();
       }, (currentTime + 0.5) * 1000);
 
@@ -171,7 +155,6 @@ const AudioEngine = ({ tab, isPlaying, onPlaybackEnd }) => {
     }
   };
 
-  console.log('🎵 AudioEngine RENDER concluído');
   return null;
 };
 

@@ -4,8 +4,6 @@ import Toolbar from './components/Toolbar';
 import TabEditor from './components/TabEditor';
 import AudioEngine from './components/AudioEngine';
 
-console.log('📝 App.js sendo carregado no módulo...');
-
 const sampleTab = {
   title: 'Minha Música',
   tempo: 120,
@@ -29,11 +27,7 @@ const sampleTab = {
   ]
 };
 
-console.log('📊 sampleTab criado:', sampleTab);
-
 function App() {
-  console.log('🎸 App function EXECUTOU!');
-  
   const [currentTab, setCurrentTab] = useState(sampleTab);
   const [isPlaying, setIsPlaying] = useState(false);
   const [selectedNote, setSelectedNote] = useState(null);
@@ -76,9 +70,8 @@ function App() {
   };
 
   const handleSave = () => {
-    console.log('Salvando projeto:', currentTab);
-    alert('Projeto salvo! (simulação)');
     setHasUnsavedChanges(false);
+    alert('Projeto salvo! (simulação)');
   };
 
   const handleNoteAdd = (newNote) => {
@@ -101,8 +94,6 @@ function App() {
   const handleNoteSelect = (note) => {
     setSelectedNote(note);
   };
-
-  console.log('🎨 App está prestes a renderizar JSX...');
 
   return (
     <div className="App">
