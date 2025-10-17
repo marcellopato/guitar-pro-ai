@@ -14,11 +14,22 @@
 ### 3️⃣ **Verificar Logs**
 Quando o executável abrir, verifique:
 
-#### No Console do Windows (se houver):
+#### **IMPORTANTE: Os logs aparecem NO TERMINAL onde você executou o .exe!**
+
+Se executou clicando duas vezes no Explorer:
+- ⚠️ Os logs NÃO aparecerão visíveis
+- Solução: Abra PowerShell ou CMD na pasta e execute:
+  ```powershell
+  .\Guitar` AI` Pro.exe
+  ```
+  (Ou renomeie para `GuitarAIPro.exe` para facilitar)
+
+#### No Console do Terminal/CMD (se executado via linha de comando):
 - Deve aparecer:
   ```
   PRODUCTION MODE
   __dirname: C:\Users\...\resources\app\electron
+  app.getAppPath(): C:\Users\...\resources\app
   indexPath: C:\Users\...\resources\app\build\index.html
   Loading URL: file:///C:/Users/.../resources/app/build/index.html
   Page loaded successfully!
