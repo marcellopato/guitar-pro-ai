@@ -29,17 +29,46 @@ function createWindow() {
   } 
   // Modo produção: carrega do build
   else {
-    // Em produção, o build está em resources/app/build/
-    const indexPath = path.join(__dirname, '..', 'build', 'index.html');
+    // Em produção empacotada, os arquivos estão dentro do .asar
+    const fs = require('fs');
+    
+    // Tenta vários caminhos possíveis
+    const possiblePaths = [
+      path.join(__dirname, '..', 'build', 'index.html'),           // Dentro do asar
+      path.join(process.resourcesPath, 'app', 'build', 'index.html'), // Fora do asar
+      path.join(process.resourcesPath, 'build', 'index.html'),     // Diretamente em resources
+    ];
+    
+    console.log('PRODUCTION MODE');
+    console.log('__dirname:', __dirname);
+    console.log('process.resourcesPath:', process.resourcesPath);
+    console.log('app.getAppPath():', app.getAppPath());
+    
+    let indexPath = null;
+    for (const testPath of possiblePaths) {
+      console.log('Testando path:', testPath);
+      if (fs.existsSync(testPath)) {
+        console.log('✅ ENCONTRADO:', testPath);
+        indexPath = testPath;
+        break;
+      } else {
+        console.log('❌ NÃO EXISTE:', testPath);
+      }
+    }
+    
+    if (!indexPath) {
+      console.error('❌ ERRO: Nenhum index.html encontrado!');
+      console.log('Listando conteúdo de __dirname:', fs.readdirSync(__dirname));
+      console.log('Listando conteúdo de parent:', fs.readdirSync(path.join(__dirname, '..')));
+      return;
+    }
+    
     const loadUrl = url.format({
       pathname: indexPath,
       protocol: 'file:',
       slashes: true
     });
     
-    console.log('PRODUCTION MODE');
-    console.log('__dirname:', __dirname);
-    console.log('indexPath:', indexPath);
     console.log('Loading URL:', loadUrl);
     
     win.loadURL(loadUrl);
