@@ -1,5 +1,6 @@
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
+const url = require('url');
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -12,16 +13,18 @@ function createWindow() {
     }
   });
 
-  const startUrl = process.env.ELECTRON_START_URL || `file://${path.join(__dirname, '..', 'build', 'index.html')}`;
-  
-  // Log para debug
-  console.log('Loading URL:', startUrl);
-  
-  win.loadURL(startUrl);
-  
-  // Abre DevTools em modo desenvolvimento
+  // Modo desenvolvimento: carrega do servidor React
   if (process.env.ELECTRON_START_URL) {
+    win.loadURL(process.env.ELECTRON_START_URL);
     win.webContents.openDevTools();
+  } 
+  // Modo produção: carrega do build
+  else {
+    win.loadURL(url.format({
+      pathname: path.join(__dirname, '../build/index.html'),
+      protocol: 'file:',
+      slashes: true
+    }));
   }
   
   // Log de erros de carregamento

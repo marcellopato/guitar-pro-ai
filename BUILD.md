@@ -2,7 +2,39 @@
 
 ## 📦 Build para Produção
 
-### Windows (.exe)
+### Windows (.exe) - A PARTIR DO WSL2
+
+**⚠️ Importante:** O WSL2 gera o executável mas não consegue criar o instalador NSIS (precisa de wine). Mas isso é suficiente!
+
+```bash
+npm run build:win
+```
+
+**Resultado:**
+- ✅ `dist/win-unpacked/Guitar AI Pro.exe` (169MB)
+- ✅ Executável portátil - não precisa instalação
+- ✅ Funciona em Windows 10/11
+
+**Como usar:**
+1. Copie a pasta `dist/win-unpacked/` inteira para o Windows
+2. Execute `Guitar AI Pro.exe`
+3. Pronto! 🎸
+
+**Criar instalador NSIS (opcional):**
+Para criar o instalador `.exe`, você precisa rodar no Windows nativo ou instalar wine no WSL2:
+```bash
+# Instalar wine (opcional)
+sudo dpkg --add-architecture i386
+sudo apt update
+sudo apt install wine wine32 wine64
+
+# Depois rodar novamente
+npm run build:win
+```
+
+---
+
+### Windows (.exe) - NO WINDOWS NATIVO
 
 ```bash
 npm run build:win
