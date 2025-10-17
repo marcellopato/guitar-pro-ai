@@ -27,7 +27,7 @@ class ErrorBoundary extends React.Component {
   }
 
   render() {
-    console.log('🛡️ ErrorBoundary render, hasError:', this.state.hasError);
+    console.log('🛡️ ErrorBoundary render() CHAMADO, hasError:', this.state.hasError);
     
     if (this.state.hasError) {
       console.error('🛡️ Mostrando tela de erro!');
@@ -67,12 +67,11 @@ if (!rootElement) {
     const root = createRoot(rootElement);
     console.log('✅ React root criado, iniciando render...');
     
+    console.log('🧪 Renderizando SEM StrictMode para debug...');
     root.render(
-      <React.StrictMode>
-        <ErrorBoundary>
-          <App />
-        </ErrorBoundary>
-      </React.StrictMode>
+      <ErrorBoundary>
+        <App />
+      </ErrorBoundary>
     );
     
     console.log('✅ React render chamado!');
