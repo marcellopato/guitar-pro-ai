@@ -40,9 +40,14 @@
     "appId": "com.guitaraipro.app",
     "productName": "Guitar AI Pro",
     "files": [
-      "build/**/*",
       "electron/**/*",
       "!electron/main.js.map"
+    ],
+    "extraResources": [
+      {
+        "from": "build",
+        "to": "build"
+      }
     ],
     "directories": {
       "buildResources": "assets",

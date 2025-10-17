@@ -29,13 +29,11 @@ function createWindow() {
   } 
   // Modo produção: carrega do build
   else {
-    // Em produção, os arquivos estão empacotados dentro do app.asar
-    // O Electron resolve automaticamente caminhos dentro do .asar
-    const indexPath = path.join(__dirname, '..', 'build', 'index.html');
+    // build/ está em resources/build/ (extraResources)
+    const indexPath = path.join(process.resourcesPath, 'build', 'index.html');
     
     console.log('PRODUCTION MODE');
-    console.log('__dirname:', __dirname);
-    console.log('app.getAppPath():', app.getAppPath());
+    console.log('process.resourcesPath:', process.resourcesPath);
     console.log('indexPath:', indexPath);
     
     const loadUrl = url.format({
