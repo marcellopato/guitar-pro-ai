@@ -44,12 +44,6 @@
       "electron/**/*",
       "!electron/main.js.map"
     ],
-    "extraResources": [
-      {
-        "from": "build",
-        "to": "app/build"
-      }
-    ],
     "directories": {
       "buildResources": "assets",
       "output": "dist"
