@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './components/App.css';
 import Toolbar from './components/Toolbar';
 import TabEditor from './components/TabEditor';
-// import AudioEngine from './components/AudioEngine';  // TEMPORARIAMENTE DESABILITADO
+import AudioEngine from './components/AudioEngine';
 
 console.log('📝 App.js sendo carregado no módulo...');
 
@@ -129,12 +129,11 @@ function App() {
         </div>
       </div>
 
-      {/* AudioEngine TEMPORARIAMENTE DESABILITADO para debug */}
-      {/* <AudioEngine
+      <AudioEngine
         tab={currentTab}
         isPlaying={isPlaying}
         onPlaybackEnd={handlePlaybackEnd}
-      /> */}
+      />
     </div>
   );
 }
