@@ -1,9 +1,13 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
-import App from './App';
 
 console.log('🚀 React index.js carregado!');
+console.log('📦 Importando App...');
+
+import App from './App';
+
+console.log('✅ App importado com sucesso!', typeof App);
 
 // Error Boundary para capturar erros
 class ErrorBoundary extends React.Component {

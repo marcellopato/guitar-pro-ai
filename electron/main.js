@@ -64,8 +64,9 @@ function createWindow() {
       console.error('✗ loadURL failed:', err);
     });
     
-    // DevTools removido - pronto para produção!
-    // Usar F12 ou Ctrl+Shift+I para abrir manualmente se necessário
+    // DevTools FORÇADO para debug de tela preta
+    console.log('🔧 Abrindo DevTools AUTOMATICAMENTE para debug...');
+    win.webContents.openDevTools({ mode: 'detach' });
   }
   
   // Log de erros de carregamento
