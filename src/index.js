@@ -67,12 +67,8 @@ if (!rootElement) {
     const root = createRoot(rootElement);
     console.log('✅ React root criado, iniciando render...');
     
-    console.log('🧪 Renderizando SEM StrictMode para debug...');
-    root.render(
-      <ErrorBoundary>
-        <App />
-      </ErrorBoundary>
-    );
+    console.log('🧪 Renderizando DIRETAMENTE App (sem ErrorBoundary)...');
+    root.render(<App />);
     
     console.log('✅ React render chamado!');
   } catch (error) {
