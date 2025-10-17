@@ -34,7 +34,20 @@ function createWindow() {
     
     console.log('PRODUCTION MODE');
     console.log('process.resourcesPath:', process.resourcesPath);
+    console.log('__dirname:', __dirname);
     console.log('indexPath:', indexPath);
+    
+    // Verifica se o arquivo existe (só funciona em dev, mas ajuda debug)
+    const fs = require('fs');
+    try {
+      if (fs.existsSync(indexPath)) {
+        console.log('✓ index.html encontrado!');
+      } else {
+        console.error('✗ index.html NÃO encontrado em:', indexPath);
+      }
+    } catch (err) {
+      console.log('Não foi possível verificar arquivo (pode ser por estar em asar):', err.message);
+    }
     
     const loadUrl = url.format({
       pathname: indexPath,
@@ -44,7 +57,11 @@ function createWindow() {
     
     console.log('Loading URL:', loadUrl);
     
-    win.loadURL(loadUrl);
+    win.loadURL(loadUrl).then(() => {
+      console.log('✓ loadURL completed');
+    }).catch(err => {
+      console.error('✗ loadURL failed:', err);
+    });
     
     // Abre DevTools em produção para debug (remover depois)
     win.webContents.openDevTools();
