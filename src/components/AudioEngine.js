@@ -18,6 +18,17 @@ const AudioEngine = ({ tab, isPlaying, onPlaybackEnd }) => {
     if (!initializedRef.current) {
       try {
         console.log('🎵 Inicializando Web Audio via Howler...');
+        
+        // FORÇA inicialização do Howler AudioContext
+        const dummySound = new Howl({
+          src: ['data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA='],
+          volume: 0
+        });
+        dummySound.play();
+        dummySound.unload();
+        
+        console.log('🎵 Howler AudioContext:', Howler.ctx ? 'DISPONÍVEL ✅' : 'NULL ❌');
+        
         initializedRef.current = true;
         console.log('✅ AudioEngine (Howler.js) INICIALIZADO!');
       } catch (error) {
@@ -58,9 +69,27 @@ const AudioEngine = ({ tab, isPlaying, onPlaybackEnd }) => {
   };
 
   const createNoteSound = (frequency, duration = 0.5) => {
-    const audioContext = Howler.ctx;
+    let audioContext = Howler.ctx;
+    
+    // Se AudioContext não existe, tenta inicializar
     if (!audioContext) {
-      console.warn('⚠️ AudioContext não disponível');
+      console.warn('⚠️ AudioContext NULL, tentando inicializar...');
+      try {
+        // Força criação do AudioContext
+        const tempSound = new Howl({
+          src: ['data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA='],
+          volume: 0
+        });
+        tempSound.play();
+        tempSound.unload();
+        audioContext = Howler.ctx;
+      } catch (e) {
+        console.error('❌ Erro ao criar AudioContext:', e);
+      }
+    }
+    
+    if (!audioContext) {
+      console.error('❌ AudioContext ainda não disponível após tentativa');
       return;
     }
 
