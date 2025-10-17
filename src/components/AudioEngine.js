@@ -9,6 +9,8 @@ import * as Tone from 'tone';
  * @param {Function} onPlaybackEnd - Callback quando termina reprodução
  */
 const AudioEngine = ({ tab, isPlaying, onPlaybackEnd }) => {
+  console.log('🎵 AudioEngine CARREGANDO...');
+  
   const synthRef = useRef(null);
   const partRef = useRef(null);
   const initializedRef = useRef(false);
@@ -16,17 +18,20 @@ const AudioEngine = ({ tab, isPlaying, onPlaybackEnd }) => {
   /**
    * Inicializa o sintetizador
    */
-  /**
-   * Inicializa o sintetizador
-   */
   useEffect(() => {
+    console.log('🎵 AudioEngine useEffect EXECUTANDO...');
+    
     if (!initializedRef.current) {
       try {
+        console.log('🎵 Criando PolySynth...');
+        
         // Cria um sintetizador polifônico com timbre de guitarra
         // Nota: No Tone.js 13.x, não passamos argumentos no construtor do PolySynth
         synthRef.current = new Tone.PolySynth();
+        console.log('✅ PolySynth criado com sucesso');
         
         // Configura o synth base
+        console.log('🎵 Configurando envelope e oscilador...');
         synthRef.current.set({
           oscillator: {
             type: 'triangle'
@@ -39,28 +44,46 @@ const AudioEngine = ({ tab, isPlaying, onPlaybackEnd }) => {
           },
           volume: -8
         });
+        console.log('✅ Configuração aplicada');
         
+        console.log('🎵 Conectando ao destino de áudio...');
         synthRef.current.toDestination();
+        console.log('✅ Conectado ao destino');
 
         initializedRef.current = true;
+        console.log('✅ AudioEngine INICIALIZADO COM SUCESSO!');
       } catch (error) {
-        console.error('Erro ao inicializar AudioEngine:', error);
+        console.error('❌ ERRO CRÍTICO ao inicializar AudioEngine:', error);
+        console.error('Stack trace:', error.stack);
+        // RE-LANÇA o erro para o ErrorBoundary capturar
+        throw error;
       }
+    } else {
+      console.log('⚠️ AudioEngine JÁ INICIALIZADO, pulando...');
     }
 
     // Cleanup ao desmontar
     return () => {
-      if (synthRef.current) {
-        synthRef.current.dispose();
-        synthRef.current = null;
+      console.log('🧹 AudioEngine CLEANUP iniciando...');
+      try {
+        if (synthRef.current) {
+          synthRef.current.dispose();
+          synthRef.current = null;
+          console.log('✅ Synth disposed');
+        }
+        if (partRef.current) {
+          partRef.current.dispose();
+          partRef.current = null;
+          console.log('✅ Part disposed');
+        }
+        Tone.Transport.stop();
+        Tone.Transport.cancel();
+        console.log('✅ Transport stopped');
+        initializedRef.current = false;
+        console.log('✅ AudioEngine CLEANUP concluído');
+      } catch (error) {
+        console.error('❌ Erro no cleanup:', error);
       }
-      if (partRef.current) {
-        partRef.current.dispose();
-        partRef.current = null;
-      }
-      Tone.Transport.stop();
-      Tone.Transport.cancel();
-      initializedRef.current = false;
     };
   }, []);
 
@@ -214,6 +237,8 @@ const AudioEngine = ({ tab, isPlaying, onPlaybackEnd }) => {
     Tone.Transport.position = 0;
   };
 
+  console.log('🎵 AudioEngine RENDER concluído (retornando null)');
+  
   // Componente sem UI - apenas lógica de áudio
   return null;
 };

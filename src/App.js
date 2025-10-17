@@ -4,6 +4,8 @@ import Toolbar from './components/Toolbar';
 import TabEditor from './components/TabEditor';
 import AudioEngine from './components/AudioEngine';
 
+console.log('📝 App.js sendo carregado no módulo...');
+
 const sampleTab = {
   title: 'Minha Música',
   tempo: 120,
@@ -27,7 +29,12 @@ const sampleTab = {
   ]
 };
 
+console.log('📊 sampleTab criado:', sampleTab);
+
 function App() {
+  console.log('🎸 App function EXECUTOU!');
+  
+  try {
   const [currentTab, setCurrentTab] = useState(sampleTab);
   const [isPlaying, setIsPlaying] = useState(false);
   const [selectedNote, setSelectedNote] = useState(null);
@@ -96,6 +103,8 @@ function App() {
     setSelectedNote(note);
   };
 
+  console.log('🎨 App está prestes a renderizar JSX...');
+
   return (
     <div className="App">
       <Toolbar
@@ -128,6 +137,24 @@ function App() {
       />
     </div>
   );
+  
+  } catch (error) {
+    console.error('❌ ERRO CRÍTICO no App:', error);
+    console.error('Stack:', error.stack);
+    return (
+      <div style={{ 
+        padding: '20px', 
+        backgroundColor: '#ff0000', 
+        color: 'white',
+        fontFamily: 'monospace',
+        whiteSpace: 'pre-wrap'
+      }}>
+        <h1>❌ ERRO CRÍTICO</h1>
+        <p>{error.toString()}</p>
+        <pre>{error.stack}</pre>
+      </div>
+    );
+  }
 }
 
 export default App;
