@@ -16,6 +16,9 @@ const AudioEngine = ({ tab, isPlaying, onPlaybackEnd }) => {
   /**
    * Inicializa o sintetizador
    */
+  /**
+   * Inicializa o sintetizador
+   */
   useEffect(() => {
     if (!initializedRef.current) {
       try {
@@ -144,6 +147,9 @@ const AudioEngine = ({ tab, isPlaying, onPlaybackEnd }) => {
   /**
    * Inicia reprodução da tablatura
    */
+  /**
+   * Inicia reprodução da tablatura
+   */
   const playTab = async () => {
     try {
       // Inicia contexto de áudio (necessário após interação do usuário)
@@ -177,19 +183,15 @@ const AudioEngine = ({ tab, isPlaying, onPlaybackEnd }) => {
       // Configura loop (opcional)
       partRef.current.loop = false;
 
-      // Callback quando termina
-      partRef.current.callback = (time) => {
-        // Último evento
-        if (time === events[events.length - 1].time) {
-          setTimeout(() => {
-            onPlaybackEnd && onPlaybackEnd();
-          }, 1000);
-        }
-      };
-
       // Inicia reprodução
       partRef.current.start(0);
       Tone.Transport.start();
+
+      // Calcula duração total e agenda fim do playback
+      const totalDuration = events[events.length - 1].time + Tone.Time(events[events.length - 1].duration).toSeconds();
+      setTimeout(() => {
+        onPlaybackEnd && onPlaybackEnd();
+      }, (totalDuration + 0.5) * 1000); // +0.5s de margem para release
 
     } catch (error) {
       console.error('Erro ao reproduzir:', error);
