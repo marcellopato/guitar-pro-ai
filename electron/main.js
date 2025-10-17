@@ -77,11 +77,8 @@ function createWindow() {
   win.webContents.on('did-finish-load', () => {
     console.log('Page loaded successfully!');
     
-    // Abre DevTools após carregar para debug
-    setTimeout(() => {
-      win.webContents.openDevTools();
-      console.log('DevTools aberto!');
-    }, 1000);
+    // DevTools pode ser aberto com F12 se necessário
+    // win.webContents.openDevTools();
   });
   
   // Log de erros de console do renderer
