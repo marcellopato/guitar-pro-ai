@@ -3,7 +3,6 @@ import './components/App.css';
 import Toolbar from './components/Toolbar';
 import TabEditor from './components/TabEditor';
 import AudioEngine from './components/AudioEngine';
-// import AIAssistant from './components/AIAssistant'; // Temporariamente desabilitado devido a conflito Tone.js
 
 const sampleTab = {
   title: 'Minha Música',
@@ -34,7 +33,6 @@ function App() {
   const [selectedNote, setSelectedNote] = useState(null);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
-  // Handlers do Toolbar
   const handleTempoChange = (newTempo) => {
     setCurrentTab({ ...currentTab, tempo: newTempo });
     setHasUnsavedChanges(true);
@@ -72,13 +70,11 @@ function App() {
   };
 
   const handleSave = () => {
-    // Simula salvamento
     console.log('Salvando projeto:', currentTab);
     alert('Projeto salvo! (simulação)');
     setHasUnsavedChanges(false);
   };
 
-  // Handlers do TabEditor
   const handleNoteAdd = (newNote) => {
     const newTab = { ...currentTab };
     newTab.tracks[0].measures[0].notes.push(newNote);
@@ -98,17 +94,6 @@ function App() {
 
   const handleNoteSelect = (note) => {
     setSelectedNote(note);
-  };
-
-  // Handler da IA
-  const handleSuggestion = (suggestion) => {
-    const newTab = { ...currentTab };
-    newTab.tracks[0].measures[0].notes = [
-      ...newTab.tracks[0].measures[0].notes,
-      ...suggestion
-    ];
-    setCurrentTab(newTab);
-    setHasUnsavedChanges(true);
   };
 
   return (
@@ -134,11 +119,6 @@ function App() {
             onNoteSelect={handleNoteSelect}
           />
         </div>
-
-        {/* Painel IA temporariamente desabilitado devido a conflito de versão Tone.js */}
-        {/* <div className="ai-panel">
-          <AIAssistant currentTab={currentTab} onSuggestion={handleSuggestion} />
-        </div> */}
       </div>
 
       <AudioEngine
