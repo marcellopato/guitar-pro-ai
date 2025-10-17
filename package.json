@@ -41,12 +41,14 @@
     "productName": "Guitar AI Pro",
     "files": [
       "electron/**/*",
-      "!electron/main.js.map"
+      "!electron/main.js.map",
+      "!build/**/*"
     ],
     "extraResources": [
       {
         "from": "build",
-        "to": "build"
+        "to": "build",
+        "filter": ["**/*"]
       }
     ],
     "directories": {
