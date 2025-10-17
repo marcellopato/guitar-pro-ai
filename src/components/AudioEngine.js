@@ -59,7 +59,12 @@ const AudioEngine = ({ tab, isPlaying, onPlaybackEnd }) => {
 
   const createNoteSound = (frequency, duration = 0.5) => {
     const audioContext = Howler.ctx;
-    if (!audioContext) return;
+    if (!audioContext) {
+      console.warn('⚠️ AudioContext não disponível');
+      return;
+    }
+
+    console.log(`🎵 Tocando nota: ${frequency.toFixed(2)} Hz por ${duration.toFixed(2)}s`);
 
     const oscillator = audioContext.createOscillator();
     const gainNode = audioContext.createGain();
@@ -67,9 +72,10 @@ const AudioEngine = ({ tab, isPlaying, onPlaybackEnd }) => {
     oscillator.type = 'triangle';
     oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
 
+    // VOLUME AUMENTADO: 0.5 (era 0.3)
     gainNode.gain.setValueAtTime(0, audioContext.currentTime);
-    gainNode.gain.linearRampToValueAtTime(0.3, audioContext.currentTime + 0.01);
-    gainNode.gain.exponentialRampToValueAtTime(0.1, audioContext.currentTime + duration * 0.3);
+    gainNode.gain.linearRampToValueAtTime(0.5, audioContext.currentTime + 0.01);
+    gainNode.gain.exponentialRampToValueAtTime(0.2, audioContext.currentTime + duration * 0.3);
     gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
 
     oscillator.connect(gainNode);
@@ -99,13 +105,16 @@ const AudioEngine = ({ tab, isPlaying, onPlaybackEnd }) => {
       const stringMidi = getStringMidi(tuning);
       const beatDuration = 60 / (tab.tempo || 120);
 
+      console.log(`🎵 Tempo: ${tab.tempo || 120} BPM, Beat: ${beatDuration.toFixed(2)}s`);
+
       let currentTime = 0;
       track.measures.forEach((measure) => {
         if (!measure.notes) return;
         measure.notes.forEach((note) => {
           const midiNote = stringMidi[note.string] + note.fret;
           const frequency = midiToFrequency(midiNote);
-          const duration = beatDuration / 2;
+          // DURAÇÃO AUMENTADA: beatDuration inteiro (era /2)
+          const duration = beatDuration;
 
           setTimeout(() => {
             createNoteSound(frequency, duration);
