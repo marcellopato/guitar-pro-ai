@@ -1,6 +1,7 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, Menu } = require('electron');
 const path = require('path');
 const url = require('url');
+const isDev = process.env.ELECTRON_START_URL !== undefined;
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -9,31 +10,57 @@ function createWindow() {
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: false,
-      contextIsolation: true
-    }
+      contextIsolation: true,
+      // Importante para produção
+      webSecurity: true
+    },
+    // Remove menu padrão
+    autoHideMenuBar: true
   });
 
+  // Remove menu completamente
+  Menu.setApplicationMenu(null);
+
   // Modo desenvolvimento: carrega do servidor React
-  if (process.env.ELECTRON_START_URL) {
+  if (isDev) {
+    console.log('DEV MODE: Loading from', process.env.ELECTRON_START_URL);
     win.loadURL(process.env.ELECTRON_START_URL);
     win.webContents.openDevTools();
   } 
   // Modo produção: carrega do build
   else {
-    win.loadURL(url.format({
-      pathname: path.join(__dirname, '../build/index.html'),
+    // Em produção, o build está em resources/app/build/
+    const indexPath = path.join(__dirname, '..', 'build', 'index.html');
+    const loadUrl = url.format({
+      pathname: indexPath,
       protocol: 'file:',
       slashes: true
-    }));
+    });
+    
+    console.log('PRODUCTION MODE');
+    console.log('__dirname:', __dirname);
+    console.log('indexPath:', indexPath);
+    console.log('Loading URL:', loadUrl);
+    
+    win.loadURL(loadUrl);
+    
+    // Abre DevTools em produção para debug (remover depois)
+    win.webContents.openDevTools();
   }
   
   // Log de erros de carregamento
-  win.webContents.on('did-fail-load', (event, errorCode, errorDescription) => {
+  win.webContents.on('did-fail-load', (event, errorCode, errorDescription, validatedURL) => {
     console.error('Failed to load:', errorDescription);
+    console.error('URL tentada:', validatedURL);
   });
   
   win.webContents.on('did-finish-load', () => {
     console.log('Page loaded successfully!');
+  });
+  
+  // Log de erros de console do renderer
+  win.webContents.on('console-message', (event, level, message, line, sourceId) => {
+    console.log(`Console [${level}]:`, message, `(${sourceId}:${line})`);
   });
 }
 
