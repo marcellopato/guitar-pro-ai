@@ -13,25 +13,22 @@ const AIAssistant = ({ currentTab, onSuggestion }) => {
 		loadModel();
 	}, []);
 
-	const loadModel = async () => {
-		setLoading(true);
-		try {
-			// Carrega modelo MusicRNN do Magenta
-			const rnn = new mm.MusicRNN(
-				'https://storage.googleapis.com/magentadata/js/checkpoints/music_rnn/basic_rnn'
-			);
-			await rnn.initialize();
-			setModel(rnn);
-			console.log('Modelo de IA carregado com sucesso!');
-		} catch (error) {
-			console.error('Erro ao carregar modelo:', error);
-			alert('Erro ao carregar modelo de IA. Verifique a conexão.');
-		} finally {
-			setLoading(false);
-		}
-	};
-
-	const generateSuggestion = async () => {
+const loadModel = async () => {
+	setLoading(true);
+	try {
+		// Carrega modelo MusicRNN do Magenta
+		const rnn = new mm.MusicRNN(
+			'https://storage.googleapis.com/magentadata/js/checkpoints/music_rnn/basic_rnn'
+		);
+		await rnn.initialize();
+		setModel(rnn);
+	} catch (error) {
+		console.error('Erro ao carregar modelo:', error);
+		alert('Erro ao carregar modelo de IA. Verifique a conexão.');
+	} finally {
+		setLoading(false);
+	}
+};	const generateSuggestion = async () => {
 		if (!model) {
 			alert('Modelo ainda não carregado. Aguarde...');
 			return;
